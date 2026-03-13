@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রফেশনাল ড্যাশবোর্ড</title>
+    <style>
+        /* প্রফেশনাল ডিজাইন স্টাইল */
+        :root {
+            --primary: #3b82f6; /* আধুনিক নীল রঙ */
+            --bg-color: #0f172a; /* ডার্ক ব্যাকগ্রাউন্ড */
+            --panel-bg: #1e293b; /* কার্ড ব্যাকগ্রাউন্ড */
+            --text-main: #f8fafc; /* প্রধান টেক্সট রঙ */
+            --text-muted: #cbd5e1; /* নিস্তেজ টেক্সট রঙ */
+            --border-color: #334155;
+            --success-color: #4ade80;
+            --error-color: #f87171;
+            --loading-color: #38bdf8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .dashboard-container {
+            background-color: var(--panel-bg);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--border-color);
+        }
+        
+        h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 2rem; font-weight: 700; }
+        h3 { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; }
+        
+        /* রেডিও বাটন এবং চেক বক্সের জন্য স্টাইল */
+        .option-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .radio-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            font-size: 1rem;
+            user-select: none;
+        }
+        
+        .radio-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .radio-mark {
+            height: 18px;
+            width: 18px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .radio-container:hover input ~ .radio-mark { background-color: #1e293b; }
+        .radio-container input:checked ~ .radio-mark { background-color: var(--primary); border-color: var(--primary); }
+        .radio-mark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .radio-container input:checked ~ .radio-mark:after { display: block; }
+        .radio-container .radio-mark:after {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        /* ইনপুট ফিল্ড স্টাইল */
+        .input-wrapper { display: none; margin-bottom: 1.2rem; }
+        .visible { display: block; }
+        
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus { border-color: var(--primary); }
+        
+        /* বাটন স্টাইল */
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        button:hover { background-color: #2563eb; }
+        button:active { transform: translateY(1px); }
+        
+        /* স্ট্যাটাস মেসেজ স্টাইল */
+        #statusMessage {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1rem;
+            min-height: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success { background-color: rgba(34, 197, 94, 0.1); color: var(--success-color); border: 1px solid #22c55e; display: block !important; }
+        .error { background-color: rgba(239, 68, 68, 0.1); color: var(--error-color); border: 1px solid #ef4444; display: block !important; }
+        .loading { background-color: rgba(14, 165, 233, 0.1); color: var(--loading-color); border: 1px solid #0ea5e9; display: block !important; }
+    
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h2>প্রফেশনাল ড্যাশবোর্ড</h2>
+        
+        <h3>১. অ্যাকশন নির্বাচন করুন:</h3>
+        <div class="option-group">
+            <label class="radio-container">
+                <input type="radio" name="actionType" value="add" checked onclick="updateVisibleFields()">
+                <span class="radio-mark"></span>
+                ফ্রেন্ড অ্যাড করুন
+            </label>
+            <label class="radio-container">
+                <input type="radio" name="actionType" value="remove" onclick="updateVisibleFields()">
+                <span class="radio-mark"></span>
+                ফ্রেন্ড ডিলিট করুন
+            </label>
+        </div>
+        
+        <h3>২. লগইন পদ্ধতি নির্বাচন করুন:</h3>
+        <div class="option-group">
+            <label class="radio-container">
+                <input type="radio" name="loginMethod" value="token" checked onclick="updateVisibleFields()">
+                <span class="radio-mark"></span>
+                টোকেন দিয়ে
+            </label>
+            <label class="radio-container">
+                <input type="radio" name="loginMethod" value="uid_pass" onclick="updateVisibleFields()">
+                <span class="radio-mark"></span>
+                ইউআইডি + পাসওয়ার্ড
+            </label>
+        </div>
+        
+        <h3>৩. প্রয়োজনীয় তথ্য দিন:</h3>
+        
+        <div class="input-wrapper" id="tokenField">
+            <label for="token">অ্যাক্সেস টোকেন</label>
+            <input type="text" id="token" placeholder="আপনার টোকেন দিন...">
+        </div>
+
+        <div class="input-wrapper" id="userIdField">
+            <label for="userId">ইউজার আইডি (UID)</label>
+            <input type="text" id="userId" placeholder="আপনার আইডি দিন...">
+        </div>
+        
+        <div class="input-wrapper" id="passwordField">
+            <label for="password">পাসওয়ার্ড</label>
+            <input type="password" id="password" placeholder="আপনার পাসওয়ার্ড দিন...">
+        </div>
+
+        <div class="input-wrapper" id="myUidField">
+            <label for="myUid">আপনার নিজের ইউআইডি (UID)</label>
+            <input type="text" id="myUid" placeholder="আপনার ইউআইডি দিন...">
+        </div>
+
+        <div class="input-wrapper visible" id="targetUidField">
+            <label for="targetUid">টার্গেট ইউআইডি (UID)</label>
+            <input type="text" id="targetUid" placeholder="টার্গেট ইউআইডি দিন...">
+        </div>
+        <button onclick="handleActionSubmit()">অ্যাকশন সম্পন্ন করুন</button>
+
+        <div id="statusMessage"></div>
+    </div>
+
+    <script>
+        // পেজ লোড হওয়ার সময় ফিল্ডগুলো আপডেট করুন
+        window.onload = updateVisibleFields;
+
+        // ইনপুট ফিল্ডগুলোকে ডাইনামিকভাবে হাইড এবং শো করার ফাংশন
+        function updateVisibleFields() {
+            const actionType = document.querySelector('input[name="actionType"]:checked').value;
+            const loginMethod = document.querySelector('input[name="loginMethod"]:checked').value;
+            
+            // সব ফিল্ড হাইড করুন
+            document.getElementById('tokenField').classList.remove('visible');
+            document.getElementById('userIdField').classList.remove('visible');
+            document.getElementById('passwordField').classList.remove('visible');
+            document.getElementById('myUidField').classList.remove('visible');
+            document.getElementById('targetUidField').classList.add('visible'); // সর্বদা দৃশ্যমান
+
+            // প্রয়োজনীয় ফিল্ডগুলো শো করুন
+            if (loginMethod === 'token') {
+                document.getElementById('tokenField').classList.add('visible');
+            } else if (loginMethod === 'uid_pass') {
+                document.getElementById('userIdField').classList.add('visible');
+                document.getElementById('passwordField').classList.add('visible');
+            }
+
+            if (actionType === 'remove' && loginMethod === 'token') {
+                // টোকেন দিয়ে ডিলিট করার সময় নিজের ইউআইডি প্রয়োজন
+                document.getElementById('myUidField').classList.add('visible');
+            }
+        }
+
+        async function handleActionSubmit() {
+            const actionType = document.querySelector('input[name="actionType"]:checked').value;
+            const loginMethod = document.querySelector('input[name="loginMethod"]:checked').value;
+            const targetUid = document.getElementById('targetUid').value.trim();
+            const statusDiv = document.getElementById('statusMessage');
+            
+            // সাধারণ ইনপুট ভ্যালিডেশন
+            if (!targetUid) {
+                showStatus("টার্গেট ইউআইডি দেওয়া আবশ্যক।", "error");
+                return;
+            }
+
+            showStatus("অনুরোধটি সম্পন্ন করা হচ্ছে...", "loading");
+            
+            // ডেটা পে-লোড তৈরি
+            let payload = {
+                action_type: actionType,
+                login_method: loginMethod,
+                target_uid: targetUid
+            };
+
+            if (loginMethod === 'token') {
+                const token = document.getElementById('token').value.trim();
+                const myUid = document.getElementById('myUid').value.trim();
+                if (!token) {
+                    showStatus("টোকেন দেওয়া আবশ্যক।", "error");
+                    return;
+                }
+                if (actionType === 'remove' && !myUid) {
+                    showStatus("আপনার নিজের ইউআইডি দেওয়া আবশ্যক।", "error");
+                    return;
+                }
+                payload.token = token;
+                payload.my_uid = myUid;
+            } else if (loginMethod === 'uid_pass') {
+                const userId = document.getElementById('userId').value.trim();
+                const password = document.getElementById('password').value.trim();
+                if (!userId || !password) {
+                    showStatus("ইউজার আইডি এবং পাসওয়ার্ড দেওয়া আবশ্যক।", "error");
+                    return;
+                }
+                payload.user_id = userId;
+                payload.password = password;
+                // এই সংস্করণ ইউআইডি/পাসওয়ার্ডের মাধ্যমে অ্যাকশন সম্পন্ন করা সমর্থন করে না।
+            }
+
+            try {
+                // একটিমাত্র এন্ডপয়েন্টে পোস্ট রিকোয়েস্ট পাঠানো
+                const response = await fetch('/api/handle_action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showStatus("✔ " + result.message, "success");
+                } else {
+                    showStatus("✖ " + result.message, "error");
+                }
+            } catch (error) {
+                showStatus("✖ সার্ভারের সাথে সংযোগ বিচ্ছিন্ন হয়েছে।", "error");
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+        }
+    </script>
+</body>
+</html>
